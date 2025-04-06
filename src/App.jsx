@@ -100,12 +100,27 @@ const handleAddFighter = (fighter) => {
   }
 };
 
+// Using the handleAddFighter as a reference I want to now add in a function to handle removing a team member once they have been added
+
+const handleRemoveFighter = (fighter) => {
+  setTeam((prevTeam) => prevTeam.filter((member) => member.id !== fighter.id));
+  setZombieFighters((prevFighters) => [...prevFighters, fighter]);
+  setMoney((prevMoney) => prevMoney + fighter.price);
+};
+
+// Re read w3 schools doc on reduce method and used my google ai to assist with the syntax as I still find myself getting confused with arrow function syntax
+// Here I want to take the fighters in my team and use the reduce method to only return their strength then total them all together
+// 0 is at the end because I am starting with a total of 0 until a team member is added
+const totalStrength = team.reduce((total, fighter) => total + fighter.strength, 0); 
+// I am doing the same process as above but now for the agility stat of the team members
+const totalAgility = team.reduce((total, fighter) => total + fighter.agility, 0);
+
   return (
     <>
     <h1>Zombie Fighters!</h1>
     <h2>Money: {money}</h2>
-    <h3>Team Strength: 0</h3>
-    <h3>Team Agility: 0</h3>
+    <h3>Team Strength: {totalStrength}</h3>
+    <h3>Team Agility: {totalAgility}</h3>
     <h3>Team:</h3>
     {team.length === 0 ? <p>Pick some team members!</p> : <p>Your Team:</p>}
     <ul>
@@ -113,6 +128,8 @@ const handleAddFighter = (fighter) => {
           <li key={fighter.id}>
             <p>{fighter.name}</p>
             <img src={fighter.img} alt={fighter.name} />
+            {/* I am now adding a remove button that will call my handleRemoveFighter function using the fighter as the event for onClick */}
+            <button onClick={() => handleRemoveFighter(fighter)}>Remove</button>
           </li>
         ))}
       </ul>
@@ -127,7 +144,8 @@ const handleAddFighter = (fighter) => {
             <p>Price: {zombieFighter.price}</p>
             <p>Strength: {zombieFighter.strength}</p>
             <p>Agility: {zombieFighter.agility}</p>
-            <button onClick={() => handleAddFighter(zombieFighter)}>Add</button>
+            <button onClick={() => handleAddFighter(zombieFighter)}>Add</button> 
+            {/* This will call my AddFighter function and pass the zombieFighter selected as the argument */}
           </div>
         </li>
       ))}
